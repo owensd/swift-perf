@@ -28,13 +28,28 @@ LD                  = $(shell xcrun -f ld)
 ANSIC_SOURCE       = $(SRC_DIR)/main.c
 ANSIC_LDFLAGS      = -arch $(ARCH) -std=gnu99 -stdlib=libstdc++
 													
-SWIFT_SOURCE       = $(wildcard $(SRC_DIR)/*.swift)
-SWIFT_LDFLAGS      = -sdk $(SDK_PATH)
+SWIFT_SOURCE       = $(wildcard $(SRC_DIR)/*.swift) $(wildcard $(SRC_DIR)/tests/*.swift)
+SWIFT_LDFLAGS      = -sdk $(SDK_PATH) -whole-module-optimization
 
 .PHONY: test
 test: clean ansic swift
-	echo generating performance results...
+	$(S)echo
 	$(S) $(BUILD_DIR)/ansic_O0
+
+	$(S)echo
+	$(S) $(BUILD_DIR)/ansic_Os
+
+	$(S)echo
+	$(S) $(BUILD_DIR)/ansic_Ofast
+
+	$(S)echo
+	$(S) $(BUILD_DIR)/swift_Onone
+
+	$(S)echo
+	$(S) $(BUILD_DIR)/swift_O
+
+	$(S)echo
+	$(S) $(BUILD_DIR)/swift_Ounchecked
 
 .PHONY: clean
 clean:

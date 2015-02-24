@@ -15,6 +15,13 @@ typedef struct {
 
 typedef float (^PLCombiner)(float Accum, float Value);
 
+#define PLPerformTest(Description, TestFunction) \
+do {\
+    PLResult Result = TestFunction(kNumberOfSamples, kNumberOfIterations); \
+    PLPrintResult(Description, Result);\
+} while(0);
+
+
 static inline float
 PLReduce(float *Items, int Size, float Initial, PLCombiner Combiner) {
     float Result = Initial;
@@ -23,6 +30,30 @@ PLReduce(float *Items, int Size, float Initial, PLCombiner Combiner) {
     }
     
     return Result;
+}
+
+static inline float
+PLMin(float *Items, int Size) {
+    float Minimum = Items[0];
+    for (int Index = 0; Index < Size; ++Index) {
+        if (Items[Index] < Minimum) {
+            Minimum = Items[Index];
+        }
+    }
+    
+    return Minimum;
+}
+
+static inline float
+PLMax(float *Items, int Size) {
+    float Maximum = Items[0];
+    for (int Index = 0; Index < Size; ++Index) {
+        if (Items[Index] > Maximum) {
+            Maximum = Items[Index];
+        }
+    }
+    
+    return Maximum;
 }
 
 static inline PLResult
@@ -58,8 +89,8 @@ PLMeasure(uint32_t SampleCount,
     });
     float StdDev = sqrtf(Sums / (SampleCount - 1));
     
-    float Minimum = 0.f;
-    float Maximum = 0.f;
+    float Minimum = PLMin(Samples, SampleCount);
+    float Maximum = PLMax(Samples, SampleCount);
     
     PLResult Result = { Average, Minimum, Maximum, StdDev };
     free(Samples);
@@ -68,7 +99,7 @@ PLMeasure(uint32_t SampleCount,
 }
 
 static inline void
-PLPrintHeader()
+PLPrintHeader(const char *Header)
 {
     struct winsize TerminalSize;
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &TerminalSize);
@@ -79,7 +110,10 @@ PLPrintHeader()
     const int StdDevWidth = 8;
     const int TitleWidth = ColumnCount - (NumberOfTimings * (TimingWidth + 1)) - StdDevWidth;
     
-    printf("%*s", TitleWidth + TimingWidth + 6, "┃ Avg (ms) ┃");
+    const int RemainingTitleWidth = TitleWidth - strlen(Header);
+    
+    printf("%.*s %*s ┃", TitleWidth, Header, RemainingTitleWidth - 2, " ");
+    printf("%*s", TimingWidth + 3, "Avg (ms) ┃");
     printf("%*s", TimingWidth + 3, "Min (ms) ┃");
     printf("%*s", TimingWidth + 3, "Max (ms) ┃");
     printf("%*s\n", StdDevWidth + 3, "StdDev ┃");

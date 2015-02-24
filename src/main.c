@@ -1,7 +1,7 @@
 /*! ===========================================================================
  @file main.c
  
- @brief The performance test runner.
+ @brief The performance test runner for C code.
  
  @copyright 2015 David Owens II. All rights reserved.
  ============================================================================ */
@@ -42,40 +42,14 @@
 int
 main(int argc, char** argv)
 {
-    PLPrintHeader();
-    
-    PLResult Result = RGRenderGradientTest(kNumberOfSamples, kNumberOfIterations);
     char Buffer[255] = {};
-    sprintf(Buffer, "RenderGradient (-%s) Samples = %d, Iterations = %d",
+    sprintf(Buffer, "Language: C, Optimization: -%s, Samples = %d, Iterations = %d",
             OptimizationLevel, kNumberOfSamples, kNumberOfIterations);
-    PLPrintResult(Buffer, Result);
-    PLPrintResult(Buffer, Result);
-    PLPrintResult(Buffer, Result);
+    PLPrintHeader(Buffer);
     
-    PLPrintSeparator(FALSE);
-    PLPrintResult(Buffer, Result);
-    PLPrintResult(Buffer, Result);
-    PLPrintResult(Buffer, Result);
-    PLPrintResult(Buffer, Result);
+    PLPerformTest("RenderGradient (Pointer Math)", RGRenderGradientTest);
+    
     PLPrintSeparator(TRUE);
     
     return 0;
 }
-
-
-/*
-                                         Avg (ms)   Min (ms)   Max (ms)   StdDev
- --------------------------------------|----------|----------|------------|---------
- RenderGradient
-
- ━━━╇━━━━╇━━━━━━┩
-    │    │      │
- ───┼────┼──────┤
-    │    │      │
- ───┴────┴──────┘
-┃
- 
-                                                                          Avg (ms) ┃ Min (ms) ┃ Max (ms) ┃   StdDev ┃
- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━┩
-
-*/
