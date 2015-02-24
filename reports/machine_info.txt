@@ -1,0 +1,9 @@
+  Model Name:	MacBook Pro
+  Model Identifier:	MacBookPro10,1
+  Processor Name:	Intel Core i7
+  Processor Speed:	2.7 GHz
+  Number of Processors:	1
+  Total Number of Cores:	4
+  L2 Cache (per Core):	256 KB
+  L3 Cache:	8 MB
+  Memory:	16 GB
