@@ -17,7 +17,7 @@
 #endif
 
 let NumberOfSamples = 10
-let NumberOfIterations = 10
+let NumberOfIterations = 30
 
 let header = "Language: Swift, Optimization: -\(opt), Samples = \(NumberOfSamples), Iterations = \(NumberOfIterations)"
 

@@ -29,7 +29,7 @@
 #include "perflib.c"
 
 #define kNumberOfSamples        10
-#define kNumberOfIterations     10
+#define kNumberOfIterations     30
 
 
 // ---------------------------------- TESTS ------------------------------------
