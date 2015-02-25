@@ -27,7 +27,7 @@ LD                  = $(shell xcrun -f ld)
 
 ANSIC_SOURCE       = $(SRC_DIR)/main.c
 ANSIC_LDFLAGS      = -arch $(ARCH) -std=gnu99 -stdlib=libstdc++
-													
+
 SWIFT_SOURCE       = $(wildcard $(SRC_DIR)/*.swift) $(wildcard $(SRC_DIR)/tests/*.swift)
 SWIFT_LDFLAGS      = -sdk $(SDK_PATH) -whole-module-optimization
 
