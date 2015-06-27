@@ -387,8 +387,8 @@ func renderGradient_ArrayUsingUnsafeMutablePointer_Pixel_SIMD(samples: Int, iter
                 let green = min(int4(Int32(y)) + yoffset, 255)
                 
                 //for x in stride(from: 0, through: buffer.width - 1, by: 4) {
-                for var x = 0, width = buffer.width; x < width; x += 4 {
-                    let blue = min(int4(Int32(x)) + xoffset, 255)
+                for var x: Int32 = 0, width = buffer.width; x < Int32(width); x += 4 {
+                    let blue = min(int4(x, x + 1, x + 2, x + 3) + xoffset, 255)
                     
                     p[offset++] = Pixel(red: 0, green: green.x, blue: blue.x, alpha: 255)
                     p[offset++] = Pixel(red: 0, green: green.y, blue: blue.y, alpha: 255)
@@ -446,12 +446,12 @@ func renderGradient_ArrayUsingUnsafeMutablePointer_UInt32_SIMD(samples: Int, ite
             // NOTE(owensd): There is a performance loss using the friendly versions.
             
             //for y in 0..<buffer.height {
-            for var y = 0, height = buffer.height; y < height; ++y {
-                let green = int4(Int32(y)) + yoffset
+            for var y: Int32 = 0, height = buffer.height; y < Int32(height); ++y {
+                let green = int4(y) + yoffset
                 
                 //for x in stride(from: 0, through: buffer.width - 1, by: 4) {
-                for var x = 0, width = buffer.width; x < width; x += 4 {
-                    let blue = int4(Int32(x)) + xoffset
+                for var x: Int32 = 0, width = buffer.width; x < Int32(width); x += 4 {
+                    let blue = int4(x, x + 1, x + 2, x + 3) + xoffset
                     
                     p[offset++] = 0xFF << 24 | UInt32(blue.x & 0xFF) << 16 | UInt32(green.x & 0xFF) << 8
                     p[offset++] = 0xFF << 24 | UInt32(blue.y & 0xFF) << 16 | UInt32(green.y & 0xFF) << 8
