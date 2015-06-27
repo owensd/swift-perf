@@ -29,5 +29,7 @@ perflib.test("RenderGradient (UnsafeMutablePointer)", NumberOfSamples, NumberOfI
 perflib.test("RenderGradient (UnsafeMutablePointer<UInt32>)", NumberOfSamples, NumberOfIterations, renderGradient_unsafeMutablePointer_UInt32)
 perflib.test("RenderGradient ([Pixel].withUnsafeMutablePointer)", NumberOfSamples, NumberOfIterations, renderGradient_ArrayUsingUnsafeMutablePointer)
 perflib.test("RenderGradient ([UInt32].withUnsafeMutablePointer)", NumberOfSamples, NumberOfIterations, renderGradient_ArrayUsingUnsafeMutablePointer_UInt32)
+perflib.test("RenderGradient ([UInt32].withUnsafeMutablePointer (SIMD))", NumberOfSamples, NumberOfIterations, renderGradient_ArrayUsingUnsafeMutablePointer_UInt32_SIMD)
+perflib.test("RenderGradient ([Pixel].withUnsafeMutablePointer (SIMD))", NumberOfSamples, NumberOfIterations, renderGradient_ArrayUsingUnsafeMutablePointer_Pixel_SIMD)
 
 perflib.separator()

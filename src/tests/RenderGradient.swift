@@ -6,6 +6,8 @@
 @copyright 2015 David Owens II. All rights reserved.
 ============================================================================ */
 
+import simd
+
 func renderGradient_PixelArray(samples: Int, iterations: Int) -> Result {
     struct Pixel {
         var red: UInt8
@@ -52,31 +54,31 @@ func renderGradient_PixelArray(samples: Int, iterations: Int) -> Result {
     var buffer = RenderBuffer(width: 960, height: 540)
  
     return perflib.measure(samples, iterations) {
-        RenderGradient(&buffer, 2, 1)
+        RenderGradient(&buffer, offsetX: 2, offsetY: 1)
     }
 }
 
 func renderGradient_PixelArray_UInt32(samples: Int, iterations: Int) -> Result {
     typealias Pixel = UInt32
     
-    func rgba(red: UInt8, green: UInt8, blue: UInt8, alpha: UInt8) -> Pixel {
-        let r = UInt32(red)
-        let g = UInt32(green) << 8
-        let b = UInt32(blue) << 16
-        let a = UInt32(alpha) << 24
-        return r | g | b | a
-    }
-    
     struct RenderBuffer {
         var pixels: [Pixel]
         var width: Int
         var height: Int
         
+        static func rgba(red: UInt8, _ green: UInt8, _ blue: UInt8, _ alpha: UInt8) -> Pixel {
+            let r = UInt32(red)
+            let g = UInt32(green) << 8
+            let b = UInt32(blue) << 16
+            let a = UInt32(alpha) << 24
+            return r | g | b | a
+        }
+
         init(width: Int, height: Int) {
             assert(width > 0)
             assert(height > 0)
             
-            let pixel = rgba(0, 0, 0, 0xFF)
+            let pixel = RenderBuffer.rgba(0, 0, 0, 0xFF)
             pixels = [Pixel](count: width * height, repeatedValue: pixel)
             
             self.width = width
@@ -91,7 +93,7 @@ func renderGradient_PixelArray_UInt32(samples: Int, iterations: Int) -> Result {
         var offset = 0
         for (var y = 0, height = buffer.height; y < height; ++y) {
             for (var x = 0, width = buffer.width; x < width; ++x) {
-                let pixel = rgba(
+                let pixel = RenderBuffer.rgba(
                     0,
                     UInt8((y + offsetY) & 0xFF),
                     UInt8((x + offsetX) & 0xFF),
@@ -105,7 +107,7 @@ func renderGradient_PixelArray_UInt32(samples: Int, iterations: Int) -> Result {
     var buffer = RenderBuffer(width: 960, height: 540)
     
     return perflib.measure(samples, iterations) {
-        RenderGradient(&buffer, 2, 1)
+        RenderGradient(&buffer, offsetX: 2, offsetY: 1)
     }
 }
 
@@ -158,26 +160,26 @@ func renderGradient_unsafeMutablePointer(samples: Int, iterations: Int) -> Resul
     var buffer = RenderBuffer(width: 960, height: 540)
 
     return perflib.measure(samples, iterations) {
-        RenderGradient(&buffer, 2, 1)
+        RenderGradient(&buffer, offsetX: 2, offsetY: 1)
     }
 }
 
 func renderGradient_unsafeMutablePointer_UInt32(samples: Int, iterations: Int) -> Result {
     typealias Pixel = UInt32
     
-    func rgba(red: UInt8, green: UInt8, blue: UInt8, alpha: UInt8) -> Pixel {
-        let r = UInt32(red)
-        let g = UInt32(green) << 8
-        let b = UInt32(blue) << 16
-        let a = UInt32(alpha) << 24
-        return r | g | b | a
-    }
-    
     struct RenderBuffer {
         var pixels: UnsafeMutablePointer<Pixel>
         var width: Int
         var height: Int
         
+        static func rgba(red: UInt8, _ green: UInt8, _ blue: UInt8, _ alpha: UInt8) -> Pixel {
+            let r = UInt32(red)
+            let g = UInt32(green) << 8
+            let b = UInt32(blue) << 16
+            let a = UInt32(alpha) << 24
+            return r | g | b | a
+        }
+
         init(width: Int, height: Int) {
             assert(width > 0)
             assert(height > 0)
@@ -200,7 +202,7 @@ func renderGradient_unsafeMutablePointer_UInt32(samples: Int, iterations: Int) -
         var offset = 0
         for (var y = 0, height = buffer.height; y < height; ++y) {
             for (var x = 0, width = buffer.width; x < width; ++x) {
-                let pixel = rgba(
+                let pixel = RenderBuffer.rgba(
                     0,
                     UInt8((y + offsetY) & 0xFF),
                     UInt8((x + offsetX) & 0xFF),
@@ -214,7 +216,7 @@ func renderGradient_unsafeMutablePointer_UInt32(samples: Int, iterations: Int) -
     var buffer = RenderBuffer(width: 960, height: 540)
     
     return perflib.measure(samples, iterations) {
-        RenderGradient(&buffer, 2, 1)
+        RenderGradient(&buffer, offsetX: 2, offsetY: 1)
     }
 }
 
@@ -266,31 +268,31 @@ func renderGradient_ArrayUsingUnsafeMutablePointer(samples: Int, iterations: Int
     var buffer = RenderBuffer(width: 960, height: 540)
     
     return perflib.measure(samples, iterations) {
-        RenderGradient(&buffer, 2, 1)
+        RenderGradient(&buffer, offsetX: 2, offsetY: 1)
     }
 }
 
 func renderGradient_ArrayUsingUnsafeMutablePointer_UInt32(samples: Int, iterations: Int) -> Result {
     typealias Pixel = UInt32
     
-    func rgba(red: UInt8, green: UInt8, blue: UInt8, alpha: UInt8) -> Pixel {
-        let r = UInt32(red)
-        let g = UInt32(green) << 8
-        let b = UInt32(blue) << 16
-        let a = UInt32(alpha) << 24
-        return r | g | b | a
-    }
-    
     struct RenderBuffer {
         var pixels: [Pixel]
         var width: Int
         var height: Int
         
+        static func rgba(red: UInt8, _ green: UInt8, _ blue: UInt8, _ alpha: UInt8) -> Pixel {
+            let r = UInt32(red)
+            let g = UInt32(green) << 8
+            let b = UInt32(blue) << 16
+            let a = UInt32(alpha) << 24
+            return r | g | b | a
+        }
+        
         init(width: Int, height: Int) {
             assert(width > 0)
             assert(height > 0)
             
-            let pixel = rgba(0, 0, 0, 0xFF)
+            let pixel = RenderBuffer.rgba(0, 0, 0, 0xFF)
             pixels = [Pixel](count: width * height, repeatedValue: pixel)
             
             self.width = width
@@ -306,7 +308,7 @@ func renderGradient_ArrayUsingUnsafeMutablePointer_UInt32(samples: Int, iteratio
             var offset = 0
             for (var y = 0, height = buffer.height; y < height; ++y) {
                 for (var x = 0, width = buffer.width; x < width; ++x) {
-                    let pixel = rgba(
+                    let pixel = RenderBuffer.rgba(
                         0,
                         UInt8((y + offsetY) & 0xFF),
                         UInt8((x + offsetX) & 0xFF),
@@ -321,6 +323,148 @@ func renderGradient_ArrayUsingUnsafeMutablePointer_UInt32(samples: Int, iteratio
     var buffer = RenderBuffer(width: 960, height: 540)
     
     return perflib.measure(samples, iterations) {
-        RenderGradient(&buffer, 2, 1)
+        RenderGradient(&buffer, offsetX: 2, offsetY: 1)
+    }
+}
+
+func renderGradient_ArrayUsingUnsafeMutablePointer_Pixel_SIMD(samples: Int, iterations: Int) -> Result {
+    struct Pixel {
+        var red: UInt8
+        var green: UInt8
+        var blue: UInt8
+        var alpha: UInt8
+        
+        init(red: UInt8, green: UInt8, blue: UInt8, alpha: UInt8 = 255) {
+            self.red = red
+            self.green = green
+            self.blue = blue
+            self.alpha = alpha
+        }
+        
+        init(red: Int32, green: Int32, blue: Int32, alpha: Int32 = 255) {
+            self.red = UInt8(red & 255)
+            self.green = UInt8(green & 255)
+            self.blue = UInt8(blue & 255)
+            self.alpha = UInt8(alpha & 255)
+        }
+        
+        init(red: Int, green: Int, blue: Int, alpha: Int = 255) {
+            self.red = UInt8(red & 255)
+            self.green = UInt8(green & 255)
+            self.blue = UInt8(blue & 255)
+            self.alpha = UInt8(alpha & 255)
+        }
+    }
+    
+    struct RenderBuffer {
+        var pixels: [Pixel]
+        var width: Int
+        var height: Int
+        
+        init(width: Int, height: Int) {
+            precondition(width > 0)
+            precondition(height > 0)
+            
+            let pixel = Pixel(red: 0, green: 0, blue: 0, alpha: 0xFF)
+            pixels = [Pixel](count: width * height, repeatedValue: pixel)
+            
+            self.width = width
+            self.height = height
+        }
+    }
+    
+    func RenderGradient(inout buffer: RenderBuffer, offsetX: Int, offsetY: Int) {
+        buffer.pixels.withUnsafeMutableBufferPointer { (inout p: UnsafeMutableBufferPointer<Pixel>) -> () in
+            var offset = 0
+
+            let yoffset = int4(Int32(offsetY))
+            let xoffset = int4(Int32(offsetX))
+
+            // NOTE(owensd): There is a performance loss using the friendly versions.
+            
+            //for y in 0..<buffer.height {
+            for var y = 0, height = buffer.height; y < height; ++y {
+                let green = min(int4(Int32(y)) + yoffset, 255)
+                
+                //for x in stride(from: 0, through: buffer.width - 1, by: 4) {
+                for var x = 0, width = buffer.width; x < width; x += 4 {
+                    let blue = min(int4(Int32(x)) + xoffset, 255)
+                    
+                    p[offset++] = Pixel(red: 0, green: green.x, blue: blue.x, alpha: 255)
+                    p[offset++] = Pixel(red: 0, green: green.y, blue: blue.y, alpha: 255)
+                    p[offset++] = Pixel(red: 0, green: green.z, blue: blue.z, alpha: 255)
+                    p[offset++] = Pixel(red: 0, green: green.w, blue: blue.w, alpha: 255)
+                }
+            }
+        }
+    }
+    
+    var buffer = RenderBuffer(width: 960, height: 540)
+    
+    return perflib.measure(samples, iterations) {
+        RenderGradient(&buffer, offsetX: 2, offsetY: 1)
+    }
+}
+
+func renderGradient_ArrayUsingUnsafeMutablePointer_UInt32_SIMD(samples: Int, iterations: Int) -> Result {
+    typealias Pixel = UInt32
+    
+    struct RenderBuffer {
+        var pixels: [Pixel]
+        var width: Int
+        var height: Int
+        
+        static func rgba(red: UInt8, _ green: UInt8, _ blue: UInt8, _ alpha: UInt8) -> Pixel {
+            let r = UInt32(red)
+            let g = UInt32(green) << 8
+            let b = UInt32(blue) << 16
+            let a = UInt32(alpha) << 24
+            return r | g | b | a
+        }
+        
+        init(width: Int, height: Int) {
+            precondition(width > 0)
+            precondition(height > 0)
+            
+            let pixel = RenderBuffer.rgba(0, 0, 0, 255)
+            pixels = [Pixel](count: width * height, repeatedValue: pixel)
+            
+            self.width = width
+            self.height = height
+        }
+    }
+    
+    func RenderGradient(inout buffer: RenderBuffer, offsetX: Int, offsetY: Int) {
+        buffer.pixels.withUnsafeMutableBufferPointer { (inout p: UnsafeMutableBufferPointer<Pixel>) -> () in
+            var offset = 0
+            
+            let yoffset = int4(Int32(offsetY))
+            let xoffset = int4(Int32(offsetX))
+            
+            // TODO(owensd): Move to the 8-bit SIMD instructions when they are available.
+            
+            // NOTE(owensd): There is a performance loss using the friendly versions.
+            
+            //for y in 0..<buffer.height {
+            for var y = 0, height = buffer.height; y < height; ++y {
+                let green = int4(Int32(y)) + yoffset
+                
+                //for x in stride(from: 0, through: buffer.width - 1, by: 4) {
+                for var x = 0, width = buffer.width; x < width; x += 4 {
+                    let blue = int4(Int32(x)) + xoffset
+                    
+                    p[offset++] = 0xFF << 24 | UInt32(blue.x & 0xFF) << 16 | UInt32(green.x & 0xFF) << 8
+                    p[offset++] = 0xFF << 24 | UInt32(blue.y & 0xFF) << 16 | UInt32(green.y & 0xFF) << 8
+                    p[offset++] = 0xFF << 24 | UInt32(blue.z & 0xFF) << 16 | UInt32(green.z & 0xFF) << 8
+                    p[offset++] = 0xFF << 24 | UInt32(blue.w & 0xFF) << 16 | UInt32(green.w & 0xFF) << 8
+                }
+            }
+        }
+    }
+    
+    var buffer = RenderBuffer(width: 960, height: 540)
+    
+    return perflib.measure(samples, iterations) {
+        RenderGradient(&buffer, offsetX: 2, offsetY: 1)
     }
 }

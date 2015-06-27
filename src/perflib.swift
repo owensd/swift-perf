@@ -39,22 +39,22 @@ enum perflib {
         let stddevWidth = 8
         let titleWidth = columnCount - (numberOfTimings * (timingWidth + 1)) - stddevWidth
 
-        let remainingTitleWidth = titleWidth - count(description)
+        let remainingTitleWidth = titleWidth - description.characters.count
         
-        print("\(description)")
-        for _ in 0 ..< remainingTitleWidth { print(" ") }
-        println("┃ Avg (ms) ┃ Min (ms) ┃ Max (ms) ┃ StdDev ┃")
+        print("\(description)", appendNewline: false)
+        for _ in 0 ..< remainingTitleWidth { print(" ", appendNewline: false) }
+        print("┃ Avg (ms) ┃ Min (ms) ┃ Max (ms) ┃ StdDev ┃")
         
-        for  _ in 0 ..< titleWidth { print("━") }
-        print("╇")
+        for  _ in 0 ..< titleWidth { print("━", appendNewline: false) }
+        print("╇", appendNewline: false)
         
         for _ in 0 ..< numberOfTimings {
-            for _ in 0 ..< timingWidth { print("━") }
-            print("╇")
+            for _ in 0 ..< timingWidth { print("━", appendNewline: false) }
+            print("╇", appendNewline: false)
         }
         
-        for _ in 0 ..< stddevWidth { print("━") }
-        println("┩")
+        for _ in 0 ..< stddevWidth { print("━", appendNewline: false) }
+        print("┩")
     }
     
     static func separator(endOfTable: Bool = true) {
@@ -64,16 +64,16 @@ enum perflib {
         let stddevWidth = 8
         let titleWidth = columnCount - (numberOfTimings * (timingWidth + 1)) - stddevWidth
         
-        for _ in 0 ..< titleWidth { print("─") }
-        print(endOfTable ? "┴" : "┼")
+        for _ in 0 ..< titleWidth { print("─", appendNewline: false) }
+        print(endOfTable ? "┴" : "┼", appendNewline: false)
         
         for _ in 0 ..< numberOfTimings {
-            for _ in 0 ..< timingWidth { print("─") }
-            print(endOfTable ? "┴" : "┼")
+            for _ in 0 ..< timingWidth { print("─", appendNewline: false) }
+            print(endOfTable ? "┴" : "┼", appendNewline: false)
         }
         
-        for _ in 0 ..< stddevWidth { print("─") }
-        println(endOfTable ? "┘" : "┤")
+        for _ in 0 ..< stddevWidth { print("─", appendNewline: false) }
+        print(endOfTable ? "┘" : "┤")
     }
 
     static func measure(sampleCount: Int, _ iterationCount: Int, _ fn: TimingFunction) -> Result {
@@ -81,7 +81,7 @@ enum perflib {
         for s in 0 ..< sampleCount {
             var elapsed: UInt64 = 0
             
-            for it in 0 ..< iterationCount {
+            for _ in 0 ..< iterationCount {
                 let start = mach_absolute_time()
                 fn()
                 elapsed += mach_absolute_time() - start
@@ -90,12 +90,12 @@ enum perflib {
             samples[s] = Float(elapsed) / Float(NSEC_PER_MSEC)
         }
         
-        let avg = reduce(samples, 0.0, +) / Float(sampleCount)
-        let sums = reduce(samples, 0.0) { sum, x in ((x - avg) * (x - avg)) + sum }
+        let avg = samples.reduce(0.0, combine: +) / Float(sampleCount)
+        let sums = samples.reduce(0.0) { sum, x in ((x - avg) * (x - avg)) + sum }
         let stddev = sqrt(sums / Float(sampleCount - 1))
         
-        let min = minElement(samples)
-        let max = maxElement(samples)
+        let min = samples.minElement() ?? 0.0
+        let max = samples.maxElement() ?? 0.0
         
         return Result(avg: avg, min: min, max: max, stddev: stddev)
     }
@@ -107,22 +107,22 @@ enum perflib {
         let stddevWidth = 8
         let titleWidth = columnCount - (numberOfTimings * (timingWidth + 1)) - stddevWidth
         
-        let remainingTitleWidth = titleWidth - count(description)
+        let remainingTitleWidth = titleWidth - description.characters.count
         
-        print("\(description)")
-        for _ in 0 ..< remainingTitleWidth { print(" ") }
+        print("\(description)", appendNewline: false)
+        for _ in 0 ..< remainingTitleWidth { print(" ", appendNewline: false) }
         
         // NSNumberFormatter is a terrible, terrible API...
         func trim(str: String!, len: Int) -> String {
             return str.substringToIndex(advance(str.startIndex, len))
         }
         
-        let avg = trim(perflib.formatter.stringFromNumber(result.avg), 8)
-        let min = trim(perflib.formatter.stringFromNumber(result.min), 8)
-        let max = trim(perflib.formatter.stringFromNumber(result.max), 8)
-        let stddev = trim(perflib.formatter.stringFromNumber(result.stddev), 6)
+        let avg = trim(perflib.formatter.stringFromNumber(result.avg), len: 8)
+        let min = trim(perflib.formatter.stringFromNumber(result.min), len: 8)
+        let max = trim(perflib.formatter.stringFromNumber(result.max), len: 8)
+        let stddev = trim(perflib.formatter.stringFromNumber(result.stddev), len: 6)
         
-        println("│ \(avg) │ \(min) │ \(max) │ \(stddev) │")
+        print("│ \(avg) │ \(min) │ \(max) │ \(stddev) │")
     }
 
     static func test(description: String, _ samples: Int, _ iterations: Int, _ fn: TestFunction) {

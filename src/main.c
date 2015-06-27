@@ -48,6 +48,7 @@ main(int argc, char** argv)
     PLPrintHeader(Buffer);
     
     PLPerformTest("RenderGradient (Pointer Math)", RGRenderGradientTest);
+    PLPerformTest("RenderGradient (SIMD)", RGRenderGradientTestSIMD);
     
     PLPrintSeparator(TRUE);
     
