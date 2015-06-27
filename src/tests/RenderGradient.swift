@@ -441,6 +441,9 @@ func renderGradient_ArrayUsingUnsafeMutablePointer_UInt32_SIMD(samples: Int, ite
             let yoffset = int4(Int32(offsetY))
             let xoffset = int4(Int32(offsetX))
             
+            let inc = int4(0, 1, 2, 3)
+            let blueaddr = inc + xoffset
+            
             // TODO(owensd): Move to the 8-bit SIMD instructions when they are available.
             
             // NOTE(owensd): There is a performance loss using the friendly versions.
@@ -451,7 +454,7 @@ func renderGradient_ArrayUsingUnsafeMutablePointer_UInt32_SIMD(samples: Int, ite
                 
                 //for x in stride(from: 0, through: buffer.width - 1, by: 4) {
                 for var x: Int32 = 0, width = buffer.width; x < Int32(width); x += 4 {
-                    let blue = int4(x, x + 1, x + 2, x + 3) + xoffset
+                    let blue = int4(x) + blueaddr
                     
                     p[offset++] = 0xFF << 24 | UInt32(blue.x & 0xFF) << 16 | UInt32(green.x & 0xFF) << 8
                     p[offset++] = 0xFF << 24 | UInt32(blue.y & 0xFF) << 16 | UInt32(green.y & 0xFF) << 8
