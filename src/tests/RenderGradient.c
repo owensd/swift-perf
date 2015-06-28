@@ -72,12 +72,14 @@ void RGRenderGradientSIMD(RGPixelBufferRef Buffer, int OffsetX, int OffsetY)
     vector_uchar4 VOffsetY = OffsetY;
     vector_uchar4 VOffsetX = OffsetX;
     
+    vector_uchar4 VInc = { 0, 1, 2, 3 };
+    vector_uchar4 VBlueAddr = VInc + VOffsetX;
+    
     for (int Y = 0; Y < Height; ++Y) {
         vector_uchar4 Green = vector_min(Y + VOffsetY, 255);
         
         for (int X = 0; X < Width; X += 4) {
-            vector_uchar4 VX = { X, X + 1, X + 2, X + 3 };
-            vector_uchar4 Blue = vector_min(VX + VOffsetX, 255);
+            vector_uchar4 Blue = vector_min(X + VBlueAddr, 255);
 
             Pixel[Offset++] = 0xFF << 24 | Blue.x << 16 | Green.x << 8;
             Pixel[Offset++] = 0xFF << 24 | Blue.y << 16 | Green.y << 8;

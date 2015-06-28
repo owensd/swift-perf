@@ -8,20 +8,20 @@
 
 Language: C, Optimization: -O0, Samples = 10, Iterations = 30             ┃ Avg (ms) ┃ Min (ms) ┃ Max (ms) ┃ StdDev ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━┩
-RenderGradient (Pointer Math)                                             │   36.470 │   33.124 │   42.117 │  2.965 │
-RenderGradient (SIMD)                                                     │   82.243 │   79.036 │   88.760 │  3.360 │
+RenderGradient (Pointer Math)                                             │   34.660 │   32.923 │   38.579 │  2.193 │
+RenderGradient (SIMD)                                                     │   74.471 │   73.370 │   79.226 │  1.790 │
 ──────────────────────────────────────────────────────────────────────────┴──────────┴──────────┴──────────┴────────┘
 
 Language: C, Optimization: -Os, Samples = 10, Iterations = 30             ┃ Avg (ms) ┃ Min (ms) ┃ Max (ms) ┃ StdDev ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━┩
-RenderGradient (Pointer Math)                                             │    9.364 │    8.723 │   11.338 │  0.994 │
-RenderGradient (SIMD)                                                     │    7.751 │    7.101 │    9.642 │  0.960 │
+RenderGradient (Pointer Math)                                             │    9.269 │    8.689 │   11.142 │  0.864 │
+RenderGradient (SIMD)                                                     │    3.847 │    3.746 │    3.983 │  0.080 │
 ──────────────────────────────────────────────────────────────────────────┴──────────┴──────────┴──────────┴────────┘
 
 Language: C, Optimization: -Ofast, Samples = 10, Iterations = 30          ┃ Avg (ms) ┃ Min (ms) ┃ Max (ms) ┃ StdDev ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━┩
-RenderGradient (Pointer Math)                                             │    3.302 │    2.865 │    5.061 │  0.693 │
-RenderGradient (SIMD)                                                     │    7.607 │    6.991 │    9.923 │  0.887 │
+RenderGradient (Pointer Math)                                             │    3.178 │    2.865 │    4.610 │  0.515 │
+RenderGradient (SIMD)                                                     │    4.207 │    3.691 │    5.778 │  0.664 │
 ──────────────────────────────────────────────────────────────────────────┴──────────┴──────────┴──────────┴────────┘
 
 Language: Swift, Optimization: -Onone, Samples = 10, Iterations = 30      ┃ Avg (ms) ┃ Min (ms) ┃ Max (ms) ┃ StdDev ┃
