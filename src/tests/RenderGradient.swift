@@ -448,13 +448,16 @@ func renderGradient_ArrayUsingUnsafeMutablePointer_UInt32_SIMD(samples: Int, ite
             
             // NOTE(owensd): There is a performance loss using the friendly versions.
             
+            let ones = int4(1)
+            let fours = int4(4)
+            
             //for y in 0..<buffer.height {
-            for var y: Int32 = 0, height = buffer.height; y < Int32(height); ++y {
-                let green = int4(y) + yoffset
+            for var y = int4(0), yi = 0, height = buffer.height; yi < height; yi++, y += ones {
+                let green = y + yoffset
                 
                 //for x in stride(from: 0, through: buffer.width - 1, by: 4) {
-                for var x: Int32 = 0, width = buffer.width; x < Int32(width); x += 4 {
-                    let blue = int4(x) + blueaddr
+                for var x = int4(0), xi = 0, width = buffer.width; xi < width; x += fours, xi += 4 {
+                    let blue = x + blueaddr
                     
                     p[offset++] = 0xFF << 24 | UInt32(blue.x & 0xFF) << 16 | UInt32(green.x & 0xFF) << 8
                     p[offset++] = 0xFF << 24 | UInt32(blue.y & 0xFF) << 16 | UInt32(green.y & 0xFF) << 8
