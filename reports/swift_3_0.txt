@@ -1,0 +1,61 @@
+make
+> Building ANSI C -O0
+> Building ANSI C -Os
+> Building ANSI C -Ofast
+> Building Swift -Onone
+> Building Swift -O
+> Building Swift -Ounchecked
+
+Language: C, Optimization: -O0, Samples = 10, Iterations = 30             ┃ Avg (ms) ┃ Min (ms) ┃ Max (ms) ┃ StdDev ┃
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━┩
+RenderGradient (Pointer Math)                                             │   34.996 │   33.223 │   38.476 │  2.129 │
+RenderGradient (SIMD)                                                     │   77.284 │   73.893 │   84.093 │  3.670 │
+──────────────────────────────────────────────────────────────────────────┴──────────┴──────────┴──────────┴────────┘
+
+Language: C, Optimization: -Os, Samples = 10, Iterations = 30             ┃ Avg (ms) ┃ Min (ms) ┃ Max (ms) ┃ StdDev ┃
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━┩
+RenderGradient (Pointer Math)                                             │    9.535 │    8.666 │   12.316 │  1.432 │
+RenderGradient (SIMD)                                                     │    4.420 │    3.667 │    5.149 │  0.648 │
+──────────────────────────────────────────────────────────────────────────┴──────────┴──────────┴──────────┴────────┘
+
+Language: C, Optimization: -Ofast, Samples = 10, Iterations = 30          ┃ Avg (ms) ┃ Min (ms) ┃ Max (ms) ┃ StdDev ┃
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━┩
+RenderGradient (Pointer Math)                                             │    3.053 │    2.865 │    4.100 │  0.371 │
+RenderGradient (SIMD)                                                     │    3.810 │    3.676 │    4.134 │  0.152 │
+──────────────────────────────────────────────────────────────────────────┴──────────┴──────────┴──────────┴────────┘
+
+Language: Swift, Optimization: -Onone, Samples = 10, Iterations = 30      ┃ Avg (ms) ┃ Min (ms) ┃ Max (ms) ┃ StdDev ┃
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━┩
+RenderGradient ([Pixel])                                                  │ 2992.632 │ 2947.714 │ 3041.948 │ 23.913 │
+RenderGradient ([UInt32])                                                 │ 389.1035 │ 380.1675 │ 404.4974 │ 7.0670 │
+RenderGradient (UnsafeMutablePointer)                                     │ 200.0568 │ 191.7541 │ 209.4043 │ 5.2761 │
+RenderGradient (UnsafeMutablePointer<UInt32>)                             │ 212.9935 │ 207.6584 │ 222.6322 │ 4.9337 │
+RenderGradient ([Pixel].withUnsafeMutablePointer)                         │ 366.9555 │ 360.9891 │ 374.4666 │  4.533 │
+RenderGradient ([UInt32].withUnsafeMutablePointer)                        │ 367.9753 │ 359.5587 │ 378.8135 │ 7.0686 │
+RenderGradient ([UInt32].withUnsafeMutablePointer (SIMD))                 │ 512.4176 │ 502.9525 │ 522.4241 │ 5.2631 │
+RenderGradient ([Pixel].withUnsafeMutablePointer (SIMD))                  │ 601.9091 │ 591.0957 │ 609.4677 │ 5.8693 │
+──────────────────────────────────────────────────────────────────────────┴──────────┴──────────┴──────────┴────────┘
+
+Language: Swift, Optimization: -O, Samples = 10, Iterations = 30          ┃ Avg (ms) ┃ Min (ms) ┃ Max (ms) ┃ StdDev ┃
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━┩
+RenderGradient ([Pixel])                                                  │ 19.84214 │ 18.86398 │ 22.93223 │ 1.4087 │
+RenderGradient ([UInt32])                                                 │ 18.58096 │ 17.13248 │ 21.16593 │ 1.7183 │
+RenderGradient (UnsafeMutablePointer)                                     │ 19.66112 │ 18.87033 │ 22.60767 │ 1.0966 │
+RenderGradient (UnsafeMutablePointer<UInt32>)                             │ 15.05691 │ 13.91324 │ 17.63912 │ 1.3198 │
+RenderGradient ([Pixel].withUnsafeMutablePointer)                         │ 20.23184 │ 18.80135 │ 22.65893 │ 1.5356 │
+RenderGradient ([UInt32].withUnsafeMutablePointer)                        │ 15.52520 │ 14.72497 │ 19.22203 │ 1.3226 │
+RenderGradient ([UInt32].withUnsafeMutablePointer (SIMD))                 │ 12.40027 │ 11.74772 │ 15.66219 │  1.209 │
+RenderGradient ([Pixel].withUnsafeMutablePointer (SIMD))                  │ 24.01914 │ 23.19182 │ 27.04742 │ 1.2454 │
+──────────────────────────────────────────────────────────────────────────┴──────────┴──────────┴──────────┴────────┘
+
+Language: Swift, Optimization: -Ounchecked, Samples = 10, Iterations = 30 ┃ Avg (ms) ┃ Min (ms) ┃ Max (ms) ┃ StdDev ┃
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━┩
+RenderGradient ([Pixel])                                                  │ 21.31191 │ 18.90159 │ 25.34951 │ 2.5475 │
+RenderGradient ([UInt32])                                                 │ 6.761804 │ 6.012235 │ 11.03768 │ 1.5982 │
+RenderGradient (UnsafeMutablePointer)                                     │ 20.94222 │ 18.94907 │ 25.11784 │ 2.3833 │
+RenderGradient (UnsafeMutablePointer<UInt32>)                             │ 7.029262 │ 6.030337 │ 11.26206 │ 1.6003 │
+RenderGradient ([Pixel].withUnsafeMutablePointer)                         │ 20.63678 │ 18.80856 │ 24.15495 │ 2.1491 │
+RenderGradient ([UInt32].withUnsafeMutablePointer)                        │  7.37088 │ 6.021451 │ 11.28684 │ 1.6682 │
+RenderGradient ([UInt32].withUnsafeMutablePointer (SIMD))                 │ 3.343166 │ 3.282768 │ 3.415797 │ 0.0468 │
+RenderGradient ([Pixel].withUnsafeMutablePointer (SIMD))                  │ 21.13056 │ 20.15512 │ 24.65528 │ 1.6232 │
+──────────────────────────────────────────────────────────────────────────┴──────────┴──────────┴──────────┴────────┘

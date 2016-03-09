@@ -33,20 +33,20 @@ func renderGradient_PixelArray(samples: Int, iterations: Int) -> Result {
         }
     }
     
-    func RenderGradient(inout buffer: RenderBuffer, offsetX: Int, offsetY: Int)
+    func RenderGradient(buffer: inout RenderBuffer, offsetX: Int, offsetY: Int)
     {
         // I truly hope you have turned down the number of iterations or you have picked
         // up a new build of Swift where this is not dog slow with -Onone.
         var offset = 0
-        for (var y = 0, height = buffer.height; y < height; ++y) {
-            for (var x = 0, width = buffer.width; x < width; ++x) {
+        for y in 0..<buffer.height {
+            for x in 0..<buffer.width {
                 let pixel = Pixel(
                     red: 0,
                     green: UInt8((y + offsetY) & 0xFF),
                     blue: UInt8((x + offsetX) & 0xFF),
                     alpha: 0xFF)
                 buffer.pixels[offset] = pixel;
-                ++offset;
+                offset += 1;
             }
         }
     }
@@ -86,20 +86,20 @@ func renderGradient_PixelArray_UInt32(samples: Int, iterations: Int) -> Result {
         }
     }
     
-    func RenderGradient(inout buffer: RenderBuffer, offsetX: Int, offsetY: Int)
+    func RenderGradient(buffer: inout RenderBuffer, offsetX: Int, offsetY: Int)
     {
         // I truly hope you have turned down the number of iterations or you have picked
         // up a new build of Swift where this is not dog slow with -Onone.
         var offset = 0
-        for (var y = 0, height = buffer.height; y < height; ++y) {
-            for (var x = 0, width = buffer.width; x < width; ++x) {
+        for y in 0..<buffer.height {
+            for x in 0..<buffer.width {
                 let pixel = RenderBuffer.rgba(
                     0,
                     UInt8((y + offsetY) & 0xFF),
                     UInt8((x + offsetX) & 0xFF),
                     0xFF)
                 buffer.pixels[offset] = pixel;
-                ++offset;
+                offset += 1;
             }
         }
     }
@@ -141,18 +141,18 @@ func renderGradient_unsafeMutablePointer(samples: Int, iterations: Int) -> Resul
         }
     }
     
-    func RenderGradient(inout buffer: RenderBuffer, offsetX: Int, offsetY: Int)
+    func RenderGradient(buffer: inout RenderBuffer, offsetX: Int, offsetY: Int)
     {
         var offset = 0
-        for (var y = 0, height = buffer.height; y < height; ++y) {
-            for (var x = 0, width = buffer.width; x < width; ++x) {
+        for y in 0..<buffer.height {
+            for x in 0..<buffer.width {
                 let pixel = Pixel(
                     red: 0,
                     green: UInt8((y + offsetY) & 0xFF),
                     blue: UInt8((x + offsetX) & 0xFF),
                     alpha: 0xFF)
                 buffer.pixels[offset] = pixel;
-                ++offset;
+                offset += 1;
             }
         }
     }
@@ -197,18 +197,18 @@ func renderGradient_unsafeMutablePointer_UInt32(samples: Int, iterations: Int) -
         }
     }
     
-    func RenderGradient(inout buffer: RenderBuffer, offsetX: Int, offsetY: Int)
+    func RenderGradient(buffer: inout RenderBuffer, offsetX: Int, offsetY: Int)
     {
         var offset = 0
-        for (var y = 0, height = buffer.height; y < height; ++y) {
-            for (var x = 0, width = buffer.width; x < width; ++x) {
+        for y in 0..<buffer.height {
+            for x in 0..<buffer.width {
                 let pixel = RenderBuffer.rgba(
                     0,
                     UInt8((y + offsetY) & 0xFF),
                     UInt8((x + offsetX) & 0xFF),
                     0xFF)
                 buffer.pixels[offset] = pixel;
-                ++offset;
+                offset += 1;
             }
         }
     }
@@ -245,21 +245,21 @@ func renderGradient_ArrayUsingUnsafeMutablePointer(samples: Int, iterations: Int
         }
     }
     
-    func RenderGradient(inout buffer: RenderBuffer, offsetX: Int, offsetY: Int)
+    func RenderGradient(buffer: inout RenderBuffer, offsetX: Int, offsetY: Int)
     {
         // Turn this code on for at least some sanity back to your debug builds. It's still
         // going to be slow, but at compared to the code above, it's going to feel glorious.
-        buffer.pixels.withUnsafeMutableBufferPointer { (inout p: UnsafeMutableBufferPointer<Pixel>) -> () in
+        buffer.pixels.withUnsafeMutableBufferPointer { (p: inout UnsafeMutableBufferPointer<Pixel>) -> () in
             var offset = 0
-            for (var y = 0, height = buffer.height; y < height; ++y) {
-                for (var x = 0, width = buffer.width; x < width; ++x) {
+            for y in 0..<buffer.height {
+                for x in 0..<buffer.width {
                     let pixel = Pixel(
                         red: 0,
                         green: UInt8((y + offsetY) & 0xFF),
                         blue: UInt8((x + offsetX) & 0xFF),
                         alpha: 0xFF)
                     p[offset] = pixel
-                    ++offset;
+                    offset += 1;
                 }
             }
         }
@@ -300,21 +300,21 @@ func renderGradient_ArrayUsingUnsafeMutablePointer_UInt32(samples: Int, iteratio
         }
     }
     
-    func RenderGradient(inout buffer: RenderBuffer, offsetX: Int, offsetY: Int)
+    func RenderGradient(buffer: inout RenderBuffer, offsetX: Int, offsetY: Int)
     {
         // Turn this code on for at least some sanity back to your debug builds. It's still
         // going to be slow, but at compared to the code above, it's going to feel glorious.
-        buffer.pixels.withUnsafeMutableBufferPointer { (inout p: UnsafeMutableBufferPointer<Pixel>) -> () in
+        buffer.pixels.withUnsafeMutableBufferPointer { (p: inout UnsafeMutableBufferPointer<Pixel>) -> () in
             var offset = 0
-            for (var y = 0, height = buffer.height; y < height; ++y) {
-                for (var x = 0, width = buffer.width; x < width; ++x) {
+            for y in 0..<buffer.height {
+                for x in 0..<buffer.width {
                     let pixel = RenderBuffer.rgba(
                         0,
                         UInt8((y + offsetY) & 0xFF),
                         UInt8((x + offsetX) & 0xFF),
                         0xFF)
                     p[offset] = pixel
-                    ++offset;
+                    offset += 1;
                 }
             }
         }
@@ -373,27 +373,31 @@ func renderGradient_ArrayUsingUnsafeMutablePointer_Pixel_SIMD(samples: Int, iter
         }
     }
     
-    func RenderGradient(inout buffer: RenderBuffer, offsetX: Int, offsetY: Int) {
-        buffer.pixels.withUnsafeMutableBufferPointer { (inout p: UnsafeMutableBufferPointer<Pixel>) -> () in
+    func RenderGradient(buffer: inout RenderBuffer, offsetX: Int, offsetY: Int) {
+        buffer.pixels.withUnsafeMutableBufferPointer { (p: inout UnsafeMutableBufferPointer<Pixel>) -> () in
             var offset = 0
 
             let yoffset = int4(Int32(offsetY))
             let xoffset = int4(Int32(offsetX))
 
-            // NOTE(owensd): There is a performance loss using the friendly versions.
-            
-            //for y in 0..<buffer.height {
-            for var y = 0, height = buffer.height; y < height; ++y {
+            for y in 0..<buffer.height {
                 let green = min(int4(Int32(y)) &+ yoffset, 255)
                 
-                //for x in stride(from: 0, through: buffer.width - 1, by: 4) {
-                for var x: Int32 = 0, width = buffer.width; x < Int32(width); x += 4 {
-                    let blue = min(int4(x, x + 1, x + 2, x + 3) &+ xoffset, 255)
+                for x in 0.stride(to: buffer.width, by: 4) {
+                    let x32 = Int32(x)
+                    let blue = min(int4(x32, x32 + 1, x32 + 2, x32 + 3) &+ xoffset, 255)
                     
-                    p[offset++] = Pixel(red: 0, green: green.x, blue: blue.x, alpha: 255)
-                    p[offset++] = Pixel(red: 0, green: green.y, blue: blue.y, alpha: 255)
-                    p[offset++] = Pixel(red: 0, green: green.z, blue: blue.z, alpha: 255)
-                    p[offset++] = Pixel(red: 0, green: green.w, blue: blue.w, alpha: 255)
+                    p[offset] = Pixel(red: 0, green: green.x, blue: blue.x, alpha: 255)
+                    offset += 1
+                    
+                    p[offset] = Pixel(red: 0, green: green.y, blue: blue.y, alpha: 255)
+                    offset += 1
+                    
+                    p[offset] = Pixel(red: 0, green: green.z, blue: blue.z, alpha: 255)
+                    offset += 1
+                    
+                    p[offset] = Pixel(red: 0, green: green.w, blue: blue.w, alpha: 255)
+                    offset += 1
                 }
             }
         }
@@ -434,8 +438,8 @@ func renderGradient_ArrayUsingUnsafeMutablePointer_UInt32_SIMD(samples: Int, ite
         }
     }
     
-    func RenderGradient(inout buffer: RenderBuffer, offsetX: Int, offsetY: Int) {
-        buffer.pixels.withUnsafeMutableBufferPointer { (inout p: UnsafeMutableBufferPointer<Pixel>) -> () in
+    func RenderGradient(buffer: inout RenderBuffer, offsetX: Int, offsetY: Int) {
+        buffer.pixels.withUnsafeMutableBufferPointer { (p: inout UnsafeMutableBufferPointer<Pixel>) -> () in
             var offset = 0
             
             let yoffset = int4(Int32(offsetY))
@@ -446,23 +450,31 @@ func renderGradient_ArrayUsingUnsafeMutablePointer_UInt32_SIMD(samples: Int, ite
             
             // TODO(owensd): Move to the 8-bit SIMD instructions when they are available.
             
-            // NOTE(owensd): There is a performance loss using the friendly versions.
-            
             let ones = int4(1)
             let fours = int4(4)
             
-            //for y in 0..<buffer.height {
-            for var y = int4(0), yi = 0, height = buffer.height; yi < height; yi++, y = y &+ ones {
-                let green = y &+ yoffset
+            var yaddr = int4(0)
+            var xaddr = int4(0)
+            
+            for _ in 0..<buffer.height {
+                yaddr = yaddr &+ ones
+                let green = yaddr &+ yoffset
                 
-                //for x in stride(from: 0, through: buffer.width - 1, by: 4) {
-                for var x = int4(0), xi = 0, width = buffer.width; xi < width; x = x &+ fours, xi += 4 {
-                    let blue = x &+ blueaddr
+                for _ in 0.stride(to: buffer.width, by: 4) {
+                    xaddr = xaddr &+ fours
+                    let blue = xaddr &+ blueaddr
                     
-                    p[offset++] = 0xFF << 24 | UInt32(blue.x & 0xFF) << 16 | UInt32(green.x & 0xFF) << 8
-                    p[offset++] = 0xFF << 24 | UInt32(blue.y & 0xFF) << 16 | UInt32(green.y & 0xFF) << 8
-                    p[offset++] = 0xFF << 24 | UInt32(blue.z & 0xFF) << 16 | UInt32(green.z & 0xFF) << 8
-                    p[offset++] = 0xFF << 24 | UInt32(blue.w & 0xFF) << 16 | UInt32(green.w & 0xFF) << 8
+                    p[offset] = 0xFF << 24 | UInt32(blue.x & 0xFF) << 16 | UInt32(green.x & 0xFF) << 8
+                    offset += 1
+                    
+                    p[offset] = 0xFF << 24 | UInt32(blue.y & 0xFF) << 16 | UInt32(green.y & 0xFF) << 8
+                    offset += 1
+
+                    p[offset] = 0xFF << 24 | UInt32(blue.z & 0xFF) << 16 | UInt32(green.z & 0xFF) << 8
+                    offset += 1
+
+                    p[offset] = 0xFF << 24 | UInt32(blue.w & 0xFF) << 16 | UInt32(green.w & 0xFF) << 8
+                    offset += 1
                 }
             }
         }
