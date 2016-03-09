@@ -41,19 +41,19 @@ enum perflib {
 
         let remainingTitleWidth = titleWidth - description.characters.count
         
-        print("\(description)", appendNewline: false)
-        for _ in 0 ..< remainingTitleWidth { print(" ", appendNewline: false) }
+        print("\(description)", terminator: "")
+        for _ in 0 ..< remainingTitleWidth { print(" ", terminator: "") }
         print("┃ Avg (ms) ┃ Min (ms) ┃ Max (ms) ┃ StdDev ┃")
         
-        for  _ in 0 ..< titleWidth { print("━", appendNewline: false) }
-        print("╇", appendNewline: false)
+        for  _ in 0 ..< titleWidth { print("━", terminator: "") }
+        print("╇", terminator: "")
         
         for _ in 0 ..< numberOfTimings {
-            for _ in 0 ..< timingWidth { print("━", appendNewline: false) }
-            print("╇", appendNewline: false)
+            for _ in 0 ..< timingWidth { print("━", terminator: "") }
+            print("╇", terminator: "")
         }
         
-        for _ in 0 ..< stddevWidth { print("━", appendNewline: false) }
+        for _ in 0 ..< stddevWidth { print("━", terminator: "") }
         print("┩")
     }
     
@@ -64,15 +64,15 @@ enum perflib {
         let stddevWidth = 8
         let titleWidth = columnCount - (numberOfTimings * (timingWidth + 1)) - stddevWidth
         
-        for _ in 0 ..< titleWidth { print("─", appendNewline: false) }
-        print(endOfTable ? "┴" : "┼", appendNewline: false)
+        for _ in 0 ..< titleWidth { print("─", terminator: "") }
+        print(endOfTable ? "┴" : "┼", terminator: "")
         
         for _ in 0 ..< numberOfTimings {
-            for _ in 0 ..< timingWidth { print("─", appendNewline: false) }
-            print(endOfTable ? "┴" : "┼", appendNewline: false)
+            for _ in 0 ..< timingWidth { print("─", terminator: "") }
+            print(endOfTable ? "┴" : "┼", terminator: "")
         }
         
-        for _ in 0 ..< stddevWidth { print("─", appendNewline: false) }
+        for _ in 0 ..< stddevWidth { print("─", terminator: "") }
         print(endOfTable ? "┘" : "┤")
     }
 
@@ -109,12 +109,13 @@ enum perflib {
         
         let remainingTitleWidth = titleWidth - description.characters.count
         
-        print("\(description)", appendNewline: false)
-        for _ in 0 ..< remainingTitleWidth { print(" ", appendNewline: false) }
+        print("\(description)", terminator: "")
+        for _ in 0 ..< remainingTitleWidth { print(" ", terminator: "") }
         
         // NSNumberFormatter is a terrible, terrible API...
         func trim(str: String!, len: Int) -> String {
-            return str.substringToIndex(advance(str.startIndex, len))
+            let s: String = str
+            return s[s.startIndex..<s.startIndex.advancedBy(len)]
         }
         
         let avg = trim(perflib.formatter.stringFromNumber(result.avg), len: 8)

@@ -384,11 +384,11 @@ func renderGradient_ArrayUsingUnsafeMutablePointer_Pixel_SIMD(samples: Int, iter
             
             //for y in 0..<buffer.height {
             for var y = 0, height = buffer.height; y < height; ++y {
-                let green = min(int4(Int32(y)) + yoffset, 255)
+                let green = min(int4(Int32(y)) &+ yoffset, 255)
                 
                 //for x in stride(from: 0, through: buffer.width - 1, by: 4) {
                 for var x: Int32 = 0, width = buffer.width; x < Int32(width); x += 4 {
-                    let blue = min(int4(x, x + 1, x + 2, x + 3) + xoffset, 255)
+                    let blue = min(int4(x, x + 1, x + 2, x + 3) &+ xoffset, 255)
                     
                     p[offset++] = Pixel(red: 0, green: green.x, blue: blue.x, alpha: 255)
                     p[offset++] = Pixel(red: 0, green: green.y, blue: blue.y, alpha: 255)
@@ -442,7 +442,7 @@ func renderGradient_ArrayUsingUnsafeMutablePointer_UInt32_SIMD(samples: Int, ite
             let xoffset = int4(Int32(offsetX))
             
             let inc = int4(0, 1, 2, 3)
-            let blueaddr = inc + xoffset
+            let blueaddr = inc &+ xoffset
             
             // TODO(owensd): Move to the 8-bit SIMD instructions when they are available.
             
@@ -452,12 +452,12 @@ func renderGradient_ArrayUsingUnsafeMutablePointer_UInt32_SIMD(samples: Int, ite
             let fours = int4(4)
             
             //for y in 0..<buffer.height {
-            for var y = int4(0), yi = 0, height = buffer.height; yi < height; yi++, y += ones {
-                let green = y + yoffset
+            for var y = int4(0), yi = 0, height = buffer.height; yi < height; yi++, y = y &+ ones {
+                let green = y &+ yoffset
                 
                 //for x in stride(from: 0, through: buffer.width - 1, by: 4) {
-                for var x = int4(0), xi = 0, width = buffer.width; xi < width; x += fours, xi += 4 {
-                    let blue = x + blueaddr
+                for var x = int4(0), xi = 0, width = buffer.width; xi < width; x = x &+ fours, xi += 4 {
+                    let blue = x &+ blueaddr
                     
                     p[offset++] = 0xFF << 24 | UInt32(blue.x & 0xFF) << 16 | UInt32(green.x & 0xFF) << 8
                     p[offset++] = 0xFF << 24 | UInt32(blue.y & 0xFF) << 16 | UInt32(green.y & 0xFF) << 8
